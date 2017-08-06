@@ -51,6 +51,12 @@ module.exports = {
         // });
     },
 
+    count: function (req, res) {
+        Product.count(function (err, cnt) {
+            res.send(cnt);
+        });
+    },
+
     post: function (req, res) {
 
         var product = new Product(req.body);
@@ -65,7 +71,6 @@ module.exports = {
                 res.send(err);
             }
         });
-
     }
 };
 

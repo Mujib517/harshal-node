@@ -6,8 +6,9 @@ productSchema = new mongoose.Schema({
     id: { type: Number, required: true },
     brand: { type: String, required: true },
     model: { type: String, required: true },
-    inStock: Boolean,
-    lastUpdated: { type: Date, default: Date.now }
+    inStock: { type: Boolean, default: false },
+    lastUpdated: { type: Date, default: Date.now },
+    test: { type: String }
     // comments:[mongoose.Schema.ObjectId]
 });
 

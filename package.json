@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jasmine-node spec"
   },
   "keywords": [],
   "author": "MD M Rahman <mujib517@gmail.com>",
@@ -13,5 +14,8 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "mongoose": "^4.11.4"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.14.5"
   }
 }
