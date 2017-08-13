@@ -1,13 +1,17 @@
 const ctrl = require('../controllers/testCtrl');
-
+const q = require('q');
 
 describe("TestController", () => {
 
     let req, res, TestCtrl, product;
 
     beforeEach(() => {
+        function fakeResponse(err, products) {
+            products = [{ id: 1, brand: 'adjfkaj' }];
+            return [{ id: 1, brand: 'adjfkaj' }];
+        }
         product = {
-            find: jasmine.createSpy(),
+            find: jasmine.createSpy().andCallFake(fakeResponse), //stub
             findById: jasmine.createSpy()
         };
 
@@ -47,7 +51,18 @@ describe("TestController", () => {
     describe("Get", () => {
 
         beforeEach(() => {
-            TestCtrl.get({}, {});
+            res = {
+                send: jasmine.createSpy(),
+                json: jasmine.createSpy(),
+                status: jasmine.createSpy()
+            }
+            TestCtrl.get(req, res);
+        });
+
+        it('should call res.send function', function () {
+            expect(res.status).toHaveBeenCalledWith();
+            //expect(res.json).toHaveBeenCalled();
+
         });
 
         it('should call find function on the mongoose model', () => {
@@ -56,7 +71,35 @@ describe("TestController", () => {
 
         it('should call findById function on the mongoose model', () => {
             TestCtrl.getById({ params: { id: 10 } }, {});
-            expect(product.findById).toHaveBeenCalledWith(10,jasmine.any(Function));
+            expect(product.findById).toHaveBeenCalledWith(10, jasmine.any(Function));
         });
+    });
+
+    iit('should return a promise', () => {
+        let deferred = q.defer();
+
+        req = {};
+        res = {
+            json: jasmine.createSpy(),
+            send: jasmine.createSpy(),
+        };
+
+        product = {
+            find: jasmine.createSpy().andReturn({
+                function() {
+                    return deferred.promise;
+                }
+            })
+        };
+
+        TestCtrl = ctrl(product); 
+
+        TestCtrl.get(req, res);
+
+        var prods = [{ id: 1, name: 'apple' }];
+
+        deferred.resolve(prods);
+
+        expect(res.json).toHaveBeenCalled();
     });
 });

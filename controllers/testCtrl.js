@@ -3,6 +3,17 @@
 
 let TestCtrl = function (Product) {
 
+    let test = function (req, res) {
+        product.find().exec()
+            .then(function (products) {
+                res.json(products);
+            })
+            .catch(function (err) {
+                res.status(500);
+                res.send("internal server error");
+            });
+    };
+
     let count = function (req, res) {
         if (req.body) {
             res.status(200);
@@ -16,7 +27,6 @@ let TestCtrl = function (Product) {
     };
 
     let get = (req, res) => {
-
         Product.find(function (err, products) {
             res.status(200);
             res.json(products);
